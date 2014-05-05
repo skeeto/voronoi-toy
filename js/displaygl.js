@@ -4,7 +4,7 @@ function DisplayGL(gl) {
     this.max = Math.floor(this.fragmax / 4);
     console.log('Max uniforms: ' + this.fragmax + ', using ' + this.max);
     this.programs = {
-        color: new Igloo.Program(gl, 'identity.vert', 'color.frag',
+        color: new Igloo.Program(gl, 'glsl/identity.vert', 'glsl/color.frag',
                                  DisplayGL.replacer({MAX: this.max}))
     };
     this.buffers = {
