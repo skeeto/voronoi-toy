@@ -11,7 +11,7 @@ window.addEventListener('load', function() {
     canvas.height = parent.offsetHeight;
 
     /* Set up display. */
-    display = new Display2D(canvas);
+    display = new Display(canvas);
     display.clear();
     for (var i = 0; i < 3; i++) {
         display.add(new Point());

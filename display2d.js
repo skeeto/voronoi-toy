@@ -1,8 +1,8 @@
-function Display2D(canvas) {
-    this.context = canvas.getContext('2d');;
-    this.points = [];
-    this.selection = null;
+function Display2D(context) {
+    this.context = context;
 }
+Display2D.prototype = Object.create(Display.prototype);
+Display2D.prototype.constructor = Display2D;
 
 Display2D.prototype.clear = function() {
     var can = this.context.canvas, c = this.context;
@@ -41,17 +41,4 @@ Display2D.prototype.draw = function() {
         c.fill();
     });
     return this;
-};
-
-Display2D.prototype.add = function(point) {
-    this.points.push(point);
-    return this;
-};
-
-Display2D.prototype.select = function(point) {
-    if (this.selection !== point) {
-        this.selection = point;
-        this.draw();
-        this.context.canvas.style.cursor = point == null ? 'auto' : 'pointer';
-    }
 };
