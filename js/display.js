@@ -25,4 +25,5 @@ Display.prototype.select = function(point) {
         this.canvas.style.cursor = point == null ? 'auto' : 'pointer';
         this.draw();
     }
+    return this;
 };

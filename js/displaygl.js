@@ -1,7 +1,7 @@
 function DisplayGL(gl) {
     this.gl = gl;
     this.fragmax = gl.getParameter(gl.MAX_FRAGMENT_UNIFORM_VECTORS);
-    this.max = Math.floor(this.fragmax / 4);
+    this.max = Math.min(128, Math.floor(this.fragmax / 4));
     console.log('Max uniforms: ' + this.fragmax + ', using ' + this.max);
     this.programs = {
         color: new Igloo.Program(gl, 'glsl/identity.vert', 'glsl/color.frag',
@@ -57,4 +57,6 @@ DisplayGL.prototype.draw = function() {
         .uniform('verts', this.buffers.verts, 2)
         .uniform('colors', this.buffers.colors, 1)
         .draw(gl.TRIANGLE_STRIP, 4);
+
+    return this;
 };
