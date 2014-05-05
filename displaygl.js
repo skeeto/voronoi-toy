@@ -12,7 +12,7 @@ function DisplayGL(gl) {
                 -1, -1, 1, -1, -1, 1, 1, 1
         ])),
         verts: new Float32Array(this.max * 2),
-        colors: new Int32Array(this.max)
+        colors: new Float32Array(this.max)
     };
 }
 DisplayGL.prototype = Object.create(Display.prototype);
