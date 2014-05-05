@@ -15,7 +15,14 @@ function Point(x, y, r, g, b) {
         this.g = g;
         this.b = b;
     }
+    this.dirty = false;
 }
+
+Point.prototype.set = function(x, y) {
+    this.x = x;
+    this.y = y;
+    this.dirty = true;
+};
 
 Point.prototype.dist2 = function(other) {
     var dx = this.x - other.x;
@@ -37,6 +44,10 @@ Point.prototype.closest = function(points) {
         }
     }
     return point;
+};
+
+Point.prototype.isDark = function() {
+    return this.r * 0.30 + this.g * 0.59 + this.b * 0.11 < 64;
 };
 
 function P(x, y) {

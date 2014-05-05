@@ -2,7 +2,7 @@ function $(s) {
     return document.querySelector(s);
 }
 
-var display = null;
+var display = null, controller = null;
 window.addEventListener('load', function() {
     /* Update cavas size. */
     var canvas = $('#voronoi'),
@@ -10,11 +10,14 @@ window.addEventListener('load', function() {
     canvas.width = parent.offsetWidth;
     canvas.height = parent.offsetHeight;
 
-    var context2d = canvas.getContext('2d');
-    display = new Display2D(context2d);
+    /* Set up display. */
+    display = new Display2D(canvas);
     display.clear();
-    for (var i = 0; i < 100; i++) {
+    for (var i = 0; i < 3; i++) {
         display.add(new Point());
     }
     display.draw();
+
+    /* Set up controller. */
+    controller = new Controller(display, canvas);
 });

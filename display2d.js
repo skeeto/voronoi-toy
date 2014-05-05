@@ -1,6 +1,7 @@
-function Display2D(context) {
-    this.context = context;
+function Display2D(canvas) {
+    this.context = canvas.getContext('2d');;
     this.points = [];
+    this.selection = null;
 }
 
 Display2D.prototype.clear = function() {
@@ -24,10 +25,19 @@ Display2D.prototype.draw = function() {
         }
     }
     c.putImageData(d, 0, 0);
-    c.fillStyle = 'black';
+    var _this = this;
+    c.strokeStyle = 'red';
     this.points.forEach(function(p) {
+        var radius = 1;
+        if (p === _this.selection) {
+            radius *= 3;
+            c.beginPath();
+            c.arc(p.x * w, p.y * h, 8, 0, Math.PI * 2, false);
+            c.stroke();
+        }
+        c.fillStyle = p.isDark() ? '#fff' : '#000';
         c.beginPath();
-        c.arc(p.x * w, p.y * h, 1, 0, Math.PI * 2, false);
+        c.arc(p.x * w, p.y * h, radius, 0, Math.PI * 2, false);
         c.fill();
     });
     return this;
@@ -36,4 +46,12 @@ Display2D.prototype.draw = function() {
 Display2D.prototype.add = function(point) {
     this.points.push(point);
     return this;
+};
+
+Display2D.prototype.select = function(point) {
+    if (this.selection !== point) {
+        this.selection = point;
+        this.draw();
+        this.context.canvas.style.cursor = point == null ? 'auto' : 'pointer';
+    }
 };
