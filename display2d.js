@@ -28,9 +28,9 @@ Display2D.prototype.draw = function() {
     var _this = this;
     c.strokeStyle = 'red';
     this.points.forEach(function(p) {
-        var radius = 1;
+        var radius = 2;
         if (p === _this.selection) {
-            radius *= 3;
+            radius *= 2;
             c.beginPath();
             c.arc(p.x * w, p.y * h, 8, 0, Math.PI * 2, false);
             c.stroke();
