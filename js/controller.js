@@ -15,9 +15,7 @@ function Controller(display, canvas) {
     });
     canvas.addEventListener('click', function(event) {
         event.preventDefault();
-        var mouse = P(event.pageX, event.pageY);
-        _this.click(mouse);
-        _this.motion(mouse);
+        _this.click(P(event.pageX, event.pageY));
         return false;
     });
     canvas.addEventListener('contextmenu', function(event) {
@@ -61,6 +59,7 @@ Controller.prototype.click = function(mouse) {
         d.add(P(mouse.x / w, mouse.y / h));
         d.draw();
     }
+    this.motion(mouse);
 };
 
 Controller.prototype.remove =  function(mouse) {
