@@ -11,6 +11,7 @@ function Display(canvas) {
     display.points = [];
     display.selection = null;
     display.canvas = canvas;
+    display.cursors = [];
     return display;
 }
 
@@ -38,10 +39,27 @@ Display.prototype.remove = function(point) {
     return this;
 };
 
+Display.prototype.cursorPush = function(name) {
+    this.cursors.push(name);
+    this.canvas.style.cursor = name;
+    return this;
+};
+
+Display.prototype.cursorPop = function() {
+    this.cursors.pop();
+    var length = this.cursors.length;
+    this.canvas.style.cursor = length === 0 ? 'auto' : this.cursors[length - 1];
+    return this;
+};
+
 Display.prototype.select = function(point) {
     if (this.selection !== point) {
         this.selection = point;
-        this.canvas.style.cursor = point == null ? 'auto' : 'pointer';
+        if (point == null) {
+            this.cursorPop();
+        } else {
+            this.cursorPush('pointer');
+        }
         this.draw();
     }
     return this;

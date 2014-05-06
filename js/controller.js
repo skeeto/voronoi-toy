@@ -7,9 +7,11 @@ function Controller(display, canvas) {
     });
     canvas.addEventListener('mousedown', function(event) {
         _this.down = true;
+        _this.display.cursorPush('none');
     });
     canvas.addEventListener('mouseup', function(event) {
         _this.down = false;
+        _this.display.cursorPop();
     });
     canvas.addEventListener('click', function(event) {
         _this.click(P(event.pageX, event.pageY));
