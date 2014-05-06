@@ -70,6 +70,7 @@ DisplayGL.prototype.draw = function() {
 
     this.programs.color.use()
         .attrib('position', this.buffers.quad, 2)
+        .uniform('size', vec2(this.gl.canvas.width, this.gl.canvas.height))
         .uniform('verts', this.buffers.verts, 2)
         .uniform('colors', this.buffers.colors, 1)
         .draw(gl.TRIANGLE_STRIP, 4);

@@ -58,7 +58,5 @@ Controller.prototype.click = function(mouse) {
 };
 
 Controller.prototype.remove =  function(mouse) {
-    this.display.remove(this.display.selection);
-    this.display.select(null);
-    this.display.draw();
+    this.display.remove(this.display.selection).select(null).draw();
 };
