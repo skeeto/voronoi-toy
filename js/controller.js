@@ -14,7 +14,11 @@ function Controller(display, canvas) {
         _this.display.cursorPop();
     });
     canvas.addEventListener('click', function(event) {
-        _this.click(P(event.pageX, event.pageY));
+        event.preventDefault();
+        var mouse = P(event.pageX, event.pageY);
+        _this.click(mouse);
+        _this.motion(mouse);
+        return false;
     });
     canvas.addEventListener('contextmenu', function(event) {
         event.preventDefault();
