@@ -1,8 +1,8 @@
 function DisplayGL(gl) {
     this.gl = gl;
-    this.fragmax = gl.getParameter(gl.MAX_FRAGMENT_UNIFORM_VECTORS);
-    this.max = Math.min(128, Math.floor(this.fragmax / 4));
-    console.log('Max uniforms: ' + this.fragmax + ', using ' + this.max);
+    var fragmax = gl.getParameter(gl.MAX_FRAGMENT_UNIFORM_VECTORS);
+    this.max = Math.min(128, Math.floor(fragmax / 4));
+    console.log('Max uniforms: ' + fragmax + ', using ' + this.max);
     this.programs = {
         color: new Igloo.Program(gl, 'glsl/identity.vert', 'glsl/color.frag',
                                  DisplayGL.replacer({MAX: this.max})),
@@ -43,7 +43,14 @@ DisplayGL.prototype.clear = function() {
 DisplayGL.prototype.draw = function() {
     var gl = this.gl;
 
-    for (var i = 0; i < this.fragmax; i++) {
+    var selection;
+    if (this.selection != null) {
+        selection = vec2(this.selection.x, 1 - this.selection.y);
+    } else {
+        selection = vec2(NaN, NaN); // matches nothing
+    }
+
+    for (var i = 0; i < this.max; i++) {
         if (i < this.points.length) {
             var p = this.points[i];
             this.buffers.verts[i * 2 + 0] = p.x;
@@ -65,6 +72,7 @@ DisplayGL.prototype.draw = function() {
 
     this.programs.points.use()
         .attrib('position', this.buffers.points, 2)
+        .uniform('selection', selection)
         .draw(gl.POINTS, this.points.length);
 
     return this;

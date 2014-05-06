@@ -14,8 +14,12 @@ function Display(canvas) {
     return display;
 }
 
+Display.prototype.max = 4096;
+
 Display.prototype.add = function(point) {
-    this.points.push(point);
+    if (this.points.length < this.max) {
+        this.points.push(point);
+    }
     return this;
 };
 
