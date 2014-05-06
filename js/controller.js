@@ -14,6 +14,11 @@ function Controller(display, canvas) {
     canvas.addEventListener('click', function(event) {
         _this.click(P(event.pageX, event.pageY));
     });
+    canvas.addEventListener('contextmenu', function(event) {
+        event.preventDefault();
+        _this.remove(P(event.pageX, event.pageY));
+        return false;
+    }, false);
     this.down = false;
 }
 
@@ -50,4 +55,9 @@ Controller.prototype.click = function(mouse) {
         d.add(P(mouse.x / w, mouse.y / h));
         d.draw();
     }
+};
+
+Controller.prototype.remove =  function(mouse) {
+    this.display.remove(this.display.selection);
+    this.display.draw();
 };

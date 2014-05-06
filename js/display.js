@@ -23,6 +23,21 @@ Display.prototype.add = function(point) {
     return this;
 };
 
+Display.prototype.remove = function(point) {
+    var ps = this.points;
+    for (var i = 0; i < ps.length; i++) {
+        if (ps[i] === point) {
+            if (i === ps.length - 1) {
+                ps.pop();
+            } else {
+                ps[i] = ps.pop();
+            }
+            break;
+        }
+    }
+    return this;
+};
+
 Display.prototype.select = function(point) {
     if (this.selection !== point) {
         this.selection = point;
