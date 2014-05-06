@@ -14,7 +14,8 @@ function DisplayGL(gl) {
         ])),
         verts: new Float32Array(this.max * 2),
         colors: new Float32Array(this.max),
-        points: new Igloo.Buffer(gl, null, gl.STREAM_DRAW)
+        points: new Igloo.Buffer(gl, null, gl.STREAM_DRAW),
+        dark: new Igloo.Buffer(gl, null, gl.STREAM_DRAW)
     };
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
@@ -50,12 +51,14 @@ DisplayGL.prototype.draw = function() {
         selection = vec2(NaN, NaN); // matches nothing
     }
 
+    var dark = new Float32Array(this.max);
     for (var i = 0; i < this.max; i++) {
         if (i < this.points.length) {
             var p = this.points[i];
             this.buffers.verts[i * 2 + 0] = p.x;
             this.buffers.verts[i * 2 + 1] = 1.0 - p.y;
             this.buffers.colors[i] = (p.r << 16) | (p.g << 8) | (p.b << 0);
+            dark[i] = p.isDark();
         } else {
             this.buffers.verts[i * 2 + 0] = Infinity;
             this.buffers.verts[i * 2 + 1] = Infinity;
@@ -63,6 +66,7 @@ DisplayGL.prototype.draw = function() {
         }
     }
     this.buffers.points.update(this.buffers.verts);
+    this.buffers.dark.update(dark);
 
     this.programs.color.use()
         .attrib('position', this.buffers.quad, 2)
@@ -72,6 +76,7 @@ DisplayGL.prototype.draw = function() {
 
     this.programs.points.use()
         .attrib('position', this.buffers.points, 2)
+        .attrib('dark', this.buffers.dark, 1)
         .uniform('selection', selection)
         .draw(gl.POINTS, this.points.length);
 
