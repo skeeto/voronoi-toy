@@ -5,15 +5,19 @@ function DisplayGL(gl) {
     console.log('Max uniforms: ' + this.fragmax + ', using ' + this.max);
     this.programs = {
         color: new Igloo.Program(gl, 'glsl/identity.vert', 'glsl/color.frag',
-                                 DisplayGL.replacer({MAX: this.max}))
+                                 DisplayGL.replacer({MAX: this.max})),
+        points: new Igloo.Program(gl, 'glsl/point.vert', 'glsl/point.frag')
     };
     this.buffers = {
         quad: new Igloo.Buffer(gl, new Float32Array([
                 -1, -1, 1, -1, -1, 1, 1, 1
         ])),
         verts: new Float32Array(this.max * 2),
-        colors: new Float32Array(this.max)
+        colors: new Float32Array(this.max),
+        points: new Igloo.Buffer(gl, null, gl.STREAM_DRAW)
     };
+    gl.enable(gl.BLEND);
+    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 }
 DisplayGL.prototype = Object.create(Display.prototype);
 DisplayGL.prototype.constructor = DisplayGL;
@@ -51,12 +55,17 @@ DisplayGL.prototype.draw = function() {
             this.buffers.colors[i] = 0;
         }
     }
+    this.buffers.points.update(this.buffers.verts);
 
     this.programs.color.use()
         .attrib('position', this.buffers.quad, 2)
         .uniform('verts', this.buffers.verts, 2)
         .uniform('colors', this.buffers.colors, 1)
         .draw(gl.TRIANGLE_STRIP, 4);
+
+    this.programs.points.use()
+        .attrib('position', this.buffers.points, 2)
+        .draw(gl.POINTS, this.points.length);
 
     return this;
 };
