@@ -23,3 +23,8 @@ window.addEventListener('load', function() {
     /* Set up controller. */
     controller = new Controller(display, canvas);
 });
+
+window.addEventListener('mousewheel', function(event) {
+    event.preventDefault();
+    return false;
+}, false);
