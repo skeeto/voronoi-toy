@@ -1,3 +1,5 @@
+var START_VERTICES = 8;
+
 function $(s) {
     return document.querySelector(s);
 }
@@ -13,7 +15,7 @@ window.addEventListener('load', function() {
     /* Set up display. */
     display = new Display(canvas);
     display.clear();
-    for (var i = 0; i < 3; i++) {
+    for (var i = 0; i < START_VERTICES; i++) {
         display.add(new Point());
     }
     display.draw();
