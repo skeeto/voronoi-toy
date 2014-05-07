@@ -24,6 +24,7 @@ function Controller(display, canvas) {
         return false;
     }, false);
     this.down = false;
+    this.lastmouse = null;
 }
 
 Controller.THRESHOLD = 12;
@@ -43,6 +44,7 @@ Controller.prototype.motion = function(mouse) {
         }
         this.display.select(null);
     }
+    this.lastmouse = mouse;
     return this;
 };
 
@@ -72,7 +74,13 @@ Controller.prototype.remove =  function(mouse) {
 
 Controller.prototype.drift = function() {
     var SPEED = 0.0005, ROTATION = 0.05;
-    function mod(b, n)   { return ((b % n) + n) % n; }
+    function clamp(p) {
+        if (p.x < 0 || p.x >= 1.0 || p.y < 0 || p.y >= 1.0) {
+            p.direction += Math.PI;
+            p.x = Math.min(Math.max(p.x, 0), 1);
+            p.y = Math.min(Math.max(p.y, 0), 1);
+        }
+    }
 
     var ps = this.display.points;
     for (var i = 0; i < ps.length; i++) {
@@ -80,8 +88,9 @@ Controller.prototype.drift = function() {
         if (p.direction == null) {
             p.direction = Math.random() * Math.PI * 2;
         }
-        p.x = mod(p.x + Math.cos(p.direction) * SPEED, 1);
-        p.y = mod(p.y + Math.sin(p.direction) * SPEED, 1);
+        p.x = p.x + Math.cos(p.direction) * SPEED;
+        p.y = p.y + Math.sin(p.direction) * SPEED;
+        clamp(p);
         p.direction += Math.random() * ROTATION * 2 - ROTATION;
     }
     return this;
@@ -94,7 +103,11 @@ Controller.prototype.redraw = function() {
 
 Controller.prototype.animate = function() {
     if (this.animating) {
-        this.drift().redraw();
+        this.drift();
+        if (this.lastmouse != null) {
+            this.motion(this.lastmouse);
+        }
+        this.redraw();
         var _this = this;
         window.requestAnimationFrame(function() {
             _this.animate();
