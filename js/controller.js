@@ -7,11 +7,11 @@ function Controller(display, canvas) {
     });
     canvas.addEventListener('mousedown', function(event) {
         _this.down = true;
-        _this.display.cursorPush('none');
+        _this.display.cursor('none');
     });
     canvas.addEventListener('mouseup', function(event) {
         _this.down = false;
-        _this.display.cursorPop();
+        _this.display.cursor();
     });
     canvas.addEventListener('click', function(event) {
         event.preventDefault();
@@ -42,9 +42,11 @@ Controller.prototype.motion = function(mouse) {
             var p = P(ps[i].x * w, ps[i].y * h);
             if (p.dist(mouse) < Controller.THRESHOLD) {
                 this.display.select(ps[i]);
+                this.display.cursor('pointer');
                 return this;
             }
         }
+        this.display.cursor('auto');
         this.display.select(null);
     }
     this.lastmouse = mouse;
