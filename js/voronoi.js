@@ -1,4 +1,4 @@
-var START_VERTICES = 8;
+var START_VERTICES = 16;
 
 function $(s) {
     return document.querySelector(s);
