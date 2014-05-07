@@ -3,8 +3,10 @@
 **Play with it online!** : http://skeeto.github.io/voronoi-toy/
 
 You can drag the vertices around on the fly with your mouse.
-Left-clicking away from any vertex places a new vertex and
-right-clicking on a vertex removes that vertex.
+
+* **left-click**  : place a new vertex or move an existing vertex
+* **right-click** : remove a vertex
+* **A** : toggle animation
 
 The diagram is computed and rendered entirely in the GPU via a
 fragment shader. There's a slow HTML5 canvas fallback for when WebGL
