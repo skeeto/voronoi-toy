@@ -24,20 +24,20 @@ Point.prototype.set = function(x, y) {
     this.dirty = true;
 };
 
-Point.prototype.dist2 = function(other) {
-    var dx = this.x - other.x;
-    var dy = this.y - other.y;
+Point.prototype.dist2 = function(other, sx, sy) {
+    var dx = (this.x - other.x) * sx;
+    var dy = (this.y - other.y) * sy;
     return dx * dx + dy * dy;
 };
 
 Point.prototype.dist = function(other) {
-    return Math.sqrt(this.dist2(other));
+    return Math.sqrt(this.dist2(other, 1, 1));
 };
 
-Point.prototype.closest = function(points) {
-    var point = points[0], dist = this.dist2(point);
+Point.prototype.closest = function(points, sx, sy) {
+    var point = points[0], dist = this.dist2(point, sx, sy);
     for (var i = 0; i < points.length; i++) {
-        var idist = this.dist2(points[i]);
+        var idist = this.dist2(points[i], sx, sy);
         if (idist < dist) {
             point = points[i];
             dist = idist;
