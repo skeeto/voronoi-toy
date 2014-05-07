@@ -38,11 +38,12 @@ Controller.prototype.motion = function(mouse) {
             var p = P(ps[i].x * w, ps[i].y * h);
             if (p.dist(mouse) < Controller.THRESHOLD) {
                 this.display.select(ps[i]);
-                return;
+                return this;
             }
         }
         this.display.select(null);
     }
+    return this;
 };
 
 Controller.prototype.drag = function(mouse, point) {
@@ -51,6 +52,7 @@ Controller.prototype.drag = function(mouse, point) {
         point.set(mouse.x / w, mouse.y / h);
         this.display.draw();
     }
+    return this;
 };
 
 Controller.prototype.click = function(mouse) {
@@ -60,8 +62,53 @@ Controller.prototype.click = function(mouse) {
         d.draw();
     }
     this.motion(mouse);
+    return this;
 };
 
 Controller.prototype.remove =  function(mouse) {
     this.display.remove(this.display.selection).select(null).draw();
+    return this;
+};
+
+Controller.prototype.drift = function() {
+    var SPEED = 0.0005, ROTATION = 0.05;
+    function mod(b, n)   { return ((b % n) + n) % n; }
+
+    var ps = this.display.points;
+    for (var i = 0; i < ps.length; i++) {
+        var p = ps[i];
+        if (p.direction == null) {
+            p.direction = Math.random() * Math.PI * 2;
+        }
+        p.x = mod(p.x + Math.cos(p.direction) * SPEED, 1);
+        p.y = mod(p.y + Math.sin(p.direction) * SPEED, 1);
+        p.direction += Math.random() * ROTATION * 2 - ROTATION;
+    }
+    return this;
+};
+
+Controller.prototype.redraw = function() {
+    this.display.draw();
+    return this;
+};
+
+Controller.prototype.animate = function() {
+    if (this.animating) {
+        this.drift().redraw();
+        var _this = this;
+        window.requestAnimationFrame(function() {
+            _this.animate();
+        });
+    }
+};
+
+Controller.prototype.startAnimate = function() {
+    if (!this.animating) {
+        this.animating = true;
+        this.animate();
+    }
+};
+
+Controller.prototype.stopAnimate = function() {
+    this.animating = false;
 };
