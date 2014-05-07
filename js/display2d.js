@@ -26,14 +26,10 @@ Display2D.prototype.draw = function() {
     }
     c.putImageData(d, 0, 0);
     var _this = this;
-    c.strokeStyle = 'red';
     this.points.forEach(function(p) {
-        var radius = 2;
+        var radius = 3;
         if (p === _this.selection) {
             radius *= 2;
-            c.beginPath();
-            c.arc(p.x * w, p.y * h, 8, 0, Math.PI * 2, false);
-            c.stroke();
         }
         c.fillStyle = p.isDark() ? '#fff' : '#000';
         c.beginPath();
