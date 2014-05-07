@@ -5,6 +5,7 @@ function Display(canvas) {
     if (gl == null) {
         console.error('WebGL initialization failed!');
         display = new Display2D(canvas.getContext('2d'));
+        document.title = document.title.replace(/WebGL/, 'HTML5 Canvas');
     } else {
         display = new DisplayGL(gl);
     }
