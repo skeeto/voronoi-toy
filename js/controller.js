@@ -23,6 +23,9 @@ function Controller(display, canvas) {
         _this.remove(P(event.pageX, event.pageY));
         return false;
     }, false);
+    window.addEventListener('keypress', function(event) {
+        _this.press(event.which);
+    });
     this.down = false;
     this.lastmouse = null;
 }
@@ -124,4 +127,20 @@ Controller.prototype.startAnimate = function() {
 
 Controller.prototype.stopAnimate = function() {
     this.animating = false;
+};
+
+Controller.prototype.toggleAnimate = function() {
+    if (this.animating) {
+        this.stopAnimate();
+    } else {
+        this.startAnimate();
+    }
+};
+
+Controller.prototype.press = function(key) {
+    switch (key) {
+    case 'a'.charCodeAt(0):
+        this.toggleAnimate();
+        break;
+    }
 };
