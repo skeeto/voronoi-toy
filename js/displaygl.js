@@ -75,11 +75,5 @@ DisplayGL.prototype.draw = function() {
         .uniform('colors', this.buffers.colors, 1)
         .draw(gl.TRIANGLE_STRIP, 4);
 
-    this.programs.points.use()
-        .attrib('position', this.buffers.points, 2)
-        .attrib('dark', this.buffers.dark, 1)
-        .uniform('selection', selection)
-        .draw(gl.POINTS, this.points.length);
-
     return this;
 };
