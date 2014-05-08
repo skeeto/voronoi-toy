@@ -7,7 +7,7 @@ uniform vec3 colors[%%MAX%%];
 uniform vec2 size;
 
 void main() {
-    float dist = 1e20, color = 0.0;
+    float dist = 1e10;
     vec3 color = vec3(1.0, 0.0, 0.0);
     for (int i = 0; i < %%MAX%%; i++) {
         float newdist = distance(verts[i] * size, coord * size);
