@@ -13,7 +13,7 @@ function DisplayGL(gl) {
                 -1, -1, 1, -1, -1, 1, 1, 1
         ])),
         verts: new Float32Array(this.max * 2),
-        colors: new Float32Array(this.max),
+        colors: new Float32Array(this.max * 3),
         points: new Igloo.Buffer(gl, null, gl.STREAM_DRAW),
         dark: new Igloo.Buffer(gl, null, gl.STREAM_DRAW)
     };
@@ -57,12 +57,13 @@ DisplayGL.prototype.draw = function() {
             var p = this.points[i];
             this.buffers.verts[i * 2 + 0] = p.x;
             this.buffers.verts[i * 2 + 1] = 1.0 - p.y;
-            this.buffers.colors[i] = (p.r << 16) | (p.g << 8) | (p.b << 0);
+            this.buffers.colors[i * 3 + 0] = p.r / 255;
+            this.buffers.colors[i * 3 + 1] = p.g / 255;
+            this.buffers.colors[i * 3 + 2] = p.b / 255;
             dark[i] = p.isDark();
         } else {
-            this.buffers.verts[i * 2 + 0] = Infinity;
-            this.buffers.verts[i * 2 + 1] = Infinity;
-            this.buffers.colors[i] = 0;
+            this.buffers.verts[i * 2 + 0] = -1e10;
+            this.buffers.verts[i * 2 + 1] = -1e10;
         }
     }
     this.buffers.points.update(this.buffers.verts);
@@ -72,7 +73,7 @@ DisplayGL.prototype.draw = function() {
         .attrib('position', this.buffers.quad, 2)
         .uniform('size', vec2(this.gl.canvas.width, this.gl.canvas.height))
         .uniform('verts', this.buffers.verts, 2)
-        .uniform('colors', this.buffers.colors, 1)
+        .uniform('colors', this.buffers.colors, 3)
         .draw(gl.TRIANGLE_STRIP, 4);
 
     this.programs.points.use()
