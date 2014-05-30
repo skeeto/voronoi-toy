@@ -5,7 +5,7 @@ function Display(canvas) {
         display = new Display2D(canvas.getContext('2d'));
         document.title = document.title.replace(/WebGL/, 'HTML5 Canvas');
     } else {
-        display = new DisplayGL(gl);
+        display = new DisplayGL2(gl);
     }
     display.points = [];
     display.selection = null;
