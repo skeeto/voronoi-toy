@@ -1,7 +1,5 @@
 function Display(canvas) {
-    var gl = canvas.getContext('webgl') ||
-            canvas.getContext('experimental-webgl');
-    var display;
+    var display, gl = Igloo.getContext(canvas);
     if (gl == null) {
         console.error('WebGL initialization failed!');
         display = new Display2D(canvas.getContext('2d'));
