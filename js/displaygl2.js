@@ -1,12 +1,14 @@
 function DisplayGL2(gl, resolution) {
     this.gl = gl;
     this.resolution = resolution = resolution || 63;
+    var w = this.gl.canvas.width, h = this.gl.canvas.height,
+        a = vec2(w, h).fdivide(vec2(w, h).magnitude());
 
-    var cone = [0, 0, -1.0];
+    var cone = [0, 0, -0.95];
     for (var i = 0; i < resolution; i++) {
         var v = i / (resolution - 1) * Math.PI * 2;
-        cone.push(Math.cos(v) * Math.sqrt(2) * 2);
-        cone.push(Math.sin(v) * Math.sqrt(2) * 2);
+        cone.push(Math.cos(v) * a.y * 2);
+        cone.push(Math.sin(v) * a.x * 2);
         cone.push(1.0);
     }
 
