@@ -1,8 +1,13 @@
 precision mediump float;
 
 attribute vec3 vert;
-uniform vec3 position;
+attribute vec2 position;
+attribute vec3 color;
+
+varying vec3 vcolor;
 
 void main() {
-    gl_Position = vec4(vert + position, 1.0);
+    vcolor = color;
+    vec3 offset = vec3(position * 2.0 - 1.0, 0.0);
+    gl_Position = vec4(vert + offset, 1.0);
 }

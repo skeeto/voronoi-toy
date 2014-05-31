@@ -1,6 +1,8 @@
 function DisplayGL2(gl, resolution) {
     this.gl = gl;
     this.resolution = resolution = resolution || 63;
+    this.ext = gl.getExtension("ANGLE_instanced_arrays");
+
     var w = this.gl.canvas.width, h = this.gl.canvas.height,
         a = vec2(w, h).fdivide(vec2(w, h).magnitude());
 
@@ -19,7 +21,8 @@ function DisplayGL2(gl, resolution) {
     this.buffers = {
         cone: new Igloo.Buffer(gl, new Float32Array(cone)),
         points: new Igloo.Buffer(gl, null, gl.STREAM_DRAW),
-        dark: new Igloo.Buffer(gl, null, gl.STREAM_DRAW)
+        dark: new Igloo.Buffer(gl, null, gl.STREAM_DRAW),
+        colors: new Igloo.Buffer(gl, null, gl.STREAM_DRAW)
     };
     gl.enable(gl.BLEND);
     gl.enable(gl.DEPTH_TEST);
@@ -37,19 +40,31 @@ DisplayGL2.prototype.clear = function() {
 };
 
 DisplayGL2.prototype.draw = function() {
-    var gl = this.gl;
+    var gl = this.gl, ext = this.ext;
     gl.clear(this.gl.DEPTH_BUFFER_BIT);
 
+    var dark = [], points = [], colors = [];
+    this.points.forEach(function(p) {
+        points.push(p.x);
+        points.push(1 - p.y);
+        colors.push(p.r / 255);
+        colors.push(p.g / 255);
+        colors.push(p.b / 255);
+        dark.push(p.isDark() ? 1 : 0);
+    });
+    this.buffers.points.update(new Float32Array(points));
+    this.buffers.dark.update(new Float32Array(dark));
+    this.buffers.colors.update(new Float32Array(colors));
+
     var cone = this.programs.cone.use()
-            .attrib('vert', this.buffers.cone, 3);
-    for (var i = 0; i < this.points.length; i++) {
-        var p = this.points[i],
-            position = vec3(p.x * 2 - 1, p.y * -2 + 1, 0.0),
-            color = vec4(p.r, p.g, p.b, 255).fdivide(255);
-        cone.uniform('position', position)
-            .uniform('color', color)
-            .draw(gl.TRIANGLE_FAN, this.resolution + 1);
-    }
+            .attrib('vert', this.buffers.cone, 3)
+            .attrib('position', this.buffers.points, 2)
+            .attrib('color', this.buffers.colors, 3);
+    ext.vertexAttribDivisorANGLE(cone.vars['vert'], 0);
+    ext.vertexAttribDivisorANGLE(cone.vars['position'], 1);
+    ext.vertexAttribDivisorANGLE(cone.vars['color'], 1);
+    ext.drawArraysInstancedANGLE(gl.TRIANGLE_FAN, this.resolution + 1,
+                                 gl.UNSIGNED_SHORT, 0, this.points.length);
 
     var selection;
     if (this.selection != null) {
@@ -58,14 +73,6 @@ DisplayGL2.prototype.draw = function() {
         selection = vec2(NaN, NaN); // matches nothing
     }
 
-    var dark = [], points = [];
-    this.points.forEach(function(p) {
-        points.push(p.x);
-        points.push(1 - p.y);
-        dark.push(p.isDark() ? 1 : 0);
-    });
-    this.buffers.points.update(new Float32Array(points));
-    this.buffers.dark.update(new Float32Array(dark));
     this.programs.points.use()
         .attrib('position', this.buffers.points, 2)
         .attrib('dark', this.buffers.dark, 1)
