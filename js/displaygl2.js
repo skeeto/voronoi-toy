@@ -38,6 +38,7 @@ DisplayGL2.prototype.clear = function() {
 
 DisplayGL2.prototype.draw = function() {
     var gl = this.gl;
+    gl.clear(this.gl.DEPTH_BUFFER_BIT);
 
     var cone = this.programs.cone.use()
             .attrib('vert', this.buffers.cone, 3);
