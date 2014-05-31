@@ -63,8 +63,8 @@ DisplayGL2.prototype.draw = function() {
     ext.vertexAttribDivisorANGLE(cone.vars['vert'], 0);
     ext.vertexAttribDivisorANGLE(cone.vars['position'], 1);
     ext.vertexAttribDivisorANGLE(cone.vars['color'], 1);
-    ext.drawArraysInstancedANGLE(gl.TRIANGLE_FAN, this.resolution + 1,
-                                 gl.UNSIGNED_SHORT, 0, this.points.length);
+    ext.drawArraysInstancedANGLE(gl.TRIANGLE_FAN, 0, this.resolution + 1,
+                                 this.points.length);
 
     var selection;
     if (this.selection != null) {
