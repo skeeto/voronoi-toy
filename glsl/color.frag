@@ -19,5 +19,6 @@ void main() {
     float g = mod(color / 256.0,   256.0) / 255.0;
     float b = mod(color / 1.0,     256.0) / 255.0;
     r = 0.8; g = b = 0.0;
-    gl_FragColor = vec4(vec3(r, g, b) + tan(dist / 90.0) / 16.0, 1.0);
+    float shade = tan(dist / (size.x / 20.0)) / 16.0;
+    gl_FragColor = vec4(vec3(r, g, b) + shade, 1.0);
 }
