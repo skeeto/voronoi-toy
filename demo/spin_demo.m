@@ -1,5 +1,6 @@
 sleep(2);
 frame = 0;    # frame counter
+n     = 128;
 
 ## Animation speed:
 drate = 0.05; # shadow rate
@@ -18,7 +19,7 @@ zl = [-1 0];
 
 shadow = 0.3;
 for alpha = 0:drate:shadow
-  cones(alpha, 0);
+  cones(n, alpha, 0);
   xlim(xl);
   ylim(yl);
   zlim(zl);
@@ -41,7 +42,7 @@ for v = vmax:-vrate:vmin
 end
 
 for v = 0:hrate:360
-  cones(shadow, v / 180 * pi);
+  cones(n, shadow, v / 180 * pi);
   xlim(xl * xysmax);
   ylim(yl * xysmax);
   zlim(zl / zsmax);
@@ -62,7 +63,7 @@ for s = 1:-srate:0;
 end
 
 for alpha = shadow:-drate:0
-  cones(alpha, 0);
+  cones(n, alpha, 0);
   xlim(xl);
   ylim(yl);
   zlim(zl);
