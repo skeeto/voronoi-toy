@@ -1,3 +1,4 @@
+sleep(2);
 frame = 0;    # frame counter
 
 ## Animation speed:

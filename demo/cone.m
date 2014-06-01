@@ -1,5 +1,5 @@
 function cone(pos, color, alpha)
-  n = 50;
+  n = 130;
   xs = [0];
   ys = [0];
   zs = [0];
